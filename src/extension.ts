@@ -1,26 +1,35 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { auth } from './github/auth';
+import { Utils } from './utils';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+// This method is called when the extension is run
+export async function activate(context: vscode.ExtensionContext) {
+	// Pass context to Utils for making it available everywhere
+	Utils.context = context;
+
+	await context.globalState.update('githubAccessToken', undefined);
 	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "elif" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('elif.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
+	let helloWorldCommand = vscode.commands.registerCommand('elif.helloWorld', () => {
 		vscode.window.showInformationMessage('Hello World from ELIF!');
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(helloWorldCommand);
+
+	let githubAuthCommand = vscode.commands.registerCommand('elif.githubAuth', async () => {
+		if (Utils.isGitHubLoggedIn()) {
+			vscode.window.showInformationMessage('You are already logged in with GitHub and good to go!');
+		} else {
+			const ghAuthChoice = await vscode.window.showInformationMessage("Would you like to connect to GitHub to receive notifications?", "Yes", "No");
+			if (ghAuthChoice === "Yes") {
+				auth();
+			}
+		}
+	});
+
+	context.subscriptions.push(githubAuthCommand);
 }
 
-// this method is called when your extension is deactivated
+// This method is called when your extension is deactivated
 export function deactivate() {}
