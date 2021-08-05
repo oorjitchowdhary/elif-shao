@@ -30,6 +30,10 @@
       {
         "command": "elif.createGitHubIssue",
         "title": "Github Issues"
+      },
+      {
+        "command": "elif.remind",
+        "title": "Set Reminder"
       }
     ]
   },
@@ -56,6 +60,9 @@
     "vscode-test": "^1.5.2"
   },
   "dependencies": {
+    "@types/date-fns": "^2.6.0",
+    "date-fns": "^2.23.0",
+    "sherlockjs": "^1.4.2",
     "axios": "^0.21.1",
     "polka": "^0.5.2"
   }
