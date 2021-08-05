@@ -20,6 +20,13 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	// change between dark/light theme based on time  
+	let changeTheme = vscode.commands.registerCommand('elif.changeTheme', () => {
+		vscode.window.showInformationMessage('I will change your theme now!');
+	});
+
+	context.subscriptions.push(changeTheme);
 }
 
 // this method is called when your extension is deactivated
