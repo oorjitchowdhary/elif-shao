@@ -29,7 +29,11 @@
       },
       {
         "command": "elif.createGitHubIssue",
-        "title": "Github Issues"
+        "title": "Create GitHub Issue"
+      },
+      {
+        "command": "elif.githubIssueComments",
+        "title": "Fetch GitHub Issue Comments"
       },
       {
         "command": "elif.remind",

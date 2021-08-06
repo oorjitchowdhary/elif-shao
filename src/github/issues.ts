@@ -38,4 +38,31 @@ const createRepoIssue = async () => {
     }
 };
 
-export { createRepoIssue };
+const getIssueComments = async () => {
+    vscode.window.showInformationMessage("Fetching issue comments...");
+    const githubRepo = await vscode.window.showInputBox({
+        placeHolder: "oorjitchowdhary/elif-shao",
+        prompt: "GitHub repository location",
+        ignoreFocusOut: true
+    });
+
+    const issueNumber = await vscode.window.showInputBox({
+        placeHolder: "Issue number",
+        prompt: "Issue number",
+        ignoreFocusOut: true
+    });
+
+    await Utils.context.globalState.update("lastGitHubRepoChecked", githubRepo);
+    await Utils.context.globalState.update("lastGitHubIssueNumber", issueNumber);
+
+    await axios.get(`https://api.github.com/repos/${githubRepo}/issues/${issueNumber}/comments`, {
+        headers: {
+            "Authorization": `token ${Utils.getGitHubAccessToken()}`
+        }
+    }).then(async (response: any) => {
+        vscode.window.showInformationMessage(`${response.data.length} comments fetched.`);
+        await Utils.context.globalState.update("lastGitHubIssueCommentsCount", response.data.length);
+    }).catch((error: any) => console.log(error));
+};
+
+export { createRepoIssue, getIssueComments };

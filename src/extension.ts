@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { auth } from './github/auth';
-import { createRepoIssue } from './github/issues';
+import { createRepoIssue, getIssueComments } from './github/issues';
 import { Utils } from './utils';
 const sherlock = require("sherlockjs");
 import * as datefns from "date-fns";
@@ -18,30 +18,9 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(helloWorldCommand);
 
-	// Github Auth
-	let githubAuthCommand = vscode.commands.registerCommand('elif.githubAuth', async () => {
-		if (Utils.isGitHubLoggedIn()) {
-			vscode.window.showInformationMessage('You are already logged in with GitHub and good to go!');
-		} else {
-			const ghAuthChoice = await vscode.window.showInformationMessage("Would you like to connect to GitHub to receive notifications?", "Yes", "No");
-			if (ghAuthChoice === "Yes") {
-				auth();
-			}
-		}
-	});
-	context.subscriptions.push(githubAuthCommand);
+	// GitHub commands
+	require('./github/index');
 
-<<<<<<< HEAD
-	let githubIssuesCommand = vscode.commands.registerCommand('elif.createGitHubIssue', async () => {
-		if (!Utils.isGitHubLoggedIn()) {
-			vscode.window.showInformationMessage('You are not logged in with GitHub!');
-		} else {
-			createRepoIssue();
-		}
-	});
-
-	context.subscriptions.push(githubIssuesCommand);
-=======
 	// Reminder Command
 	let reminder = vscode.commands.registerCommand("elif.remind", () => {
     
@@ -108,7 +87,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	  });
 
 	  context.subscriptions.push(reminder);
->>>>>>> 24ed7d7729668c90d3923616e187293967871b76
 }
 
 // This method is called when your extension is deactivated

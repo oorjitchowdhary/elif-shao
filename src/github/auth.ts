@@ -4,7 +4,7 @@ const app = require('polka')();
 app.listen(12635);
 
 export const auth = () => {
-    vscode.commands.executeCommand("vscode.open", vscode.Uri.parse("https://elif-shao-api.herokuapp.com/auth/github"));
+    vscode.commands.executeCommand("vscode.open", vscode.Uri.parse("http://localhost:3000/auth/github"));
 
     app.get("/auth/github/token/:token", async (req: any, res: any) => {
         const accessToken = req.params.token;
