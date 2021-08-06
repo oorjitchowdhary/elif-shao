@@ -6,4 +6,8 @@ export class Utils {
     static isGitHubLoggedIn(): boolean {
         return !!this.context.globalState.get("githubAccessToken");
     }
+
+    static getGitHubAccessToken(): string | undefined {
+        return this.context.globalState.get("githubAccessToken");
+    }
 }

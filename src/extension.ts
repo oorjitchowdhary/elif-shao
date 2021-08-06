@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { auth } from './github/auth';
+import { createRepoIssue, getIssueComments } from './github/issues';
 import { Utils } from './utils';
 const sherlock = require("sherlockjs");
 import * as datefns from "date-fns";
@@ -9,8 +10,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Pass context to Utils for making it available everywhere
 	Utils.context = context;
 
-	await context.globalState.update('githubAccessToken', undefined);
-	
 	console.log('Congratulations, your extension "elif" is now active!');
 
 	// Hello World Command
@@ -19,18 +18,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(helloWorldCommand);
 
-	// Github Auth
-	let githubAuthCommand = vscode.commands.registerCommand('elif.githubAuth', async () => {
-		if (Utils.isGitHubLoggedIn()) {
-			vscode.window.showInformationMessage('You are already logged in with GitHub and good to go!');
-		} else {
-			const ghAuthChoice = await vscode.window.showInformationMessage("Would you like to connect to GitHub to receive notifications?", "Yes", "No");
-			if (ghAuthChoice === "Yes") {
-				auth();
-			}
-		}
-	});
-	context.subscriptions.push(githubAuthCommand);
+	// GitHub commands
+	require('./github/index');
 
 	// Reminder Command
 	let reminder = vscode.commands.registerCommand("elif.remind", () => {
