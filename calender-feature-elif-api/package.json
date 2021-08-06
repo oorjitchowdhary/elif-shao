@@ -1,0 +1,22 @@
+{
+  "name": "elif-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc -w",
+    "dev": "nodemon dist/index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "googleapis": "39",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.4.12",
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.12",
+    "typescript": "^4.3.5"
+  }
+}
