@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
 		function changeTheme() {
 			// const userConfig = vscode.workspace.getConfiguration();
 			// const currentTheme = userConfig.get("workbench.colorTheme") as string;
-			vscode.window.showInformationMessage("DayTime = " + DateUtils.isDayTime());
+			// vscode.window.showInformationMessage("DayTime = " + DateUtils.isDayTime());
 
 			if (DateUtils.isDayTime()) {
 				enableLightTheme();
