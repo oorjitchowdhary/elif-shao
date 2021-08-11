@@ -24,6 +24,10 @@
         "title": "Hello World"
       },
       {
+        "command": "elif.changeTheme",
+        "title": "Change Theme"
+      },
+      {
         "command": "elif.githubAuth",
         "title": "Github Auth"
       },
@@ -64,6 +68,7 @@
     "vscode-test": "^1.5.2"
   },
   "dependencies": {
+    "suncalc": "^1.8.0"
     "@types/date-fns": "^2.6.0",
     "date-fns": "^2.23.0",
     "sherlockjs": "^1.4.2",
