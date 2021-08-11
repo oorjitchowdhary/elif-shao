@@ -1,26 +1,91 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { DateUtils } from './utils/utils';
-import { Coordinate } from 'geolocation-coordinate';
+import { auth } from './github/auth';
+import { createRepoIssue, getIssueComments } from './github/issues';
+import { Utils } from './utils';
+const sherlock = require("sherlockjs");
+import * as datefns from "date-fns";
 
+// This method is called when the extension is run
+export async function activate(context: vscode.ExtensionContext) {
+	// Pass context to Utils for making it available everywhere
+	Utils.context = context;
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "elif" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('elif.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
+	// Hello World Command
+	let helloWorldCommand = vscode.commands.registerCommand('elif.helloWorld', () => {
 		vscode.window.showInformationMessage('Hello World from ELIF!');
 	});
+	context.subscriptions.push(helloWorldCommand);
+
+	// GitHub commands
+	require('./github/index');
+
+	// Reminder Command
+	let reminder = vscode.commands.registerCommand("elif.remind", () => {
+    
+		// setting a placeholder
+		var placeholderTask: string = "Example: Attend a meeting in 30 mins";
+		 
+		vscode.window
+		  .showInputBox({
+			ignoreFocusOut: true,
+			placeHolder: `${placeholderTask}`,
+			prompt: `Set a reminder! (Use "repeat" to repeat the reminder)`,
+		  })
+		  .then((reminder) => {
+			if (!reminder) {
+			  return;
+			}
+			
+			// extracting the task, date and time from sherlockjs
+			const event = sherlock.parse(reminder);
+	
+			// warning for invalid message
+			if (!event.eventTitle || !event.startDate) {
+			  vscode.window.showWarningMessage(
+				"Sorry, couldn't understand. Please type in again."
+			  );
+			  return;
+			}
+			
+			// get title and create reminder message
+			let reminderMessage: string = ` ⏰  '${
+			  event.eventTitle
+			}' in ${datefns.formatDistanceToNow(event.startDate)}`;
+			vscode.window.showInformationMessage(reminderMessage);
+	
+			// set time for reminder
+			const timePeriod = datefns.differenceInMilliseconds(
+			  event.startDate,
+			  new Date()
+			);
+
+			let repeat = false;
+			if (reminder.includes("repeat")) {
+				console.log("repeat this reminder");
+				repeat = true;
+			}
+	
+			// set timer for the reminder
+			if (repeat) {
+				var timer = setInterval(function () {
+					vscode.window
+					  .showInformationMessage(`⏰  '${event.eventTitle}' is now!`);
+				  }, timePeriod);
+			}
+			else {
+				var timer = setInterval(function () {
+					vscode.window
+					  .showInformationMessage(`⏰  '${event.eventTitle}' is now!`)
+					  .then(() => {
+						clearTimeout(timer);
+					  });
+				  }, timePeriod);
+			}
+		  });
+	  });
 
 	context.subscriptions.push(disposable);
 
@@ -91,8 +156,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() { }
+	  context.subscriptions.push(reminder);
+}
 
-
-
-
-
+// This method is called when your extension is deactivated
+export function deactivate() {}
