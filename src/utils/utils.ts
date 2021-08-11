@@ -1,3 +1,6 @@
+var suncalc = require('suncalc');
+
+
 export class DateUtils {
   /**
    * Subtract two dates and return the time in ms.

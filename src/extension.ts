@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { DateUtils } from './utils/utils';
+import { Coordinate } from 'geolocation-coordinate';
+
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -24,10 +26,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// change between dark/light theme based on time  
 	let changeTheme = vscode.commands.registerCommand('elif.changeTheme', () => {
-		let nightTheme: string = vscode.workspace.getConfiguration('nightlight').get('nightTheme') || "Default Dark+";
-		let nightIconTheme: string = vscode.workspace.getConfiguration('nightlight').get('nightIconTheme') || vscode.workspace.getConfiguration('workbench').get('iconTheme') || "vs-minimal";
-		let lightTheme: string = vscode.workspace.getConfiguration('nightlight').get('dayTheme') || "Default Light+";
-		let lightIconTheme: string = vscode.workspace.getConfiguration('nightlight').get('dayIconTheme') || vscode.workspace.getConfiguration('workbench').get('iconTheme') || "vs-minimal";
+		let nightTheme: string = vscode.workspace.getConfiguration().get('nightTheme') || "Default Dark+";
+		let nightIconTheme: string = vscode.workspace.getConfiguration().get('nightIconTheme') || vscode.workspace.getConfiguration('workbench').get('iconTheme') || "vs-minimal";
+		let lightTheme: string = vscode.workspace.getConfiguration().get('dayTheme') || "Default Light+";
+		let lightIconTheme: string = vscode.workspace.getConfiguration().get('dayIconTheme') || vscode.workspace.getConfiguration('workbench').get('iconTheme') || "vs-minimal";
 
 		/**
 		 * Enable a given icon theme 
@@ -72,9 +74,11 @@ export function activate(context: vscode.ExtensionContext) {
 			// vscode.window.showInformationMessage("DayTime = " + DateUtils.isDayTime());
 
 			if (DateUtils.isDayTime()) {
+				vscode.window.showInformationMessage('Let me turn on the lights for you!');
 				enableLightTheme();
 			}
 			else {
+				vscode.window.showInformationMessage('I will turn the lights off for you!');
 				enableDarkTheme();
 			}
 		}
