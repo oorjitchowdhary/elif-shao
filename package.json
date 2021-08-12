@@ -27,6 +27,7 @@
         "command": "elif.changeTheme",
         "title": "Change Theme"
       },
+      {
         "command": "elif.githubAuth",
         "title": "Github Auth"
       },
@@ -37,6 +38,10 @@
       {
         "command": "elif.githubIssueComments",
         "title": "Fetch GitHub Issue Comments"
+      },
+      {
+        "command": "elif.createIssueComment",
+        "title": "Create Issue Comment"
       },
       {
         "command": "elif.remind",
@@ -67,7 +72,7 @@
     "vscode-test": "^1.5.2"
   },
   "dependencies": {
-    "suncalc": "^1.8.0"
+    "suncalc": "^1.8.0",
     "@types/date-fns": "^2.6.0",
     "date-fns": "^2.23.0",
     "sherlockjs": "^1.4.2",
